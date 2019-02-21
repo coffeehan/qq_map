@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>位置</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=AW3BZ-IM7EU-NTLVB-BESN6-SKE32-WAFIT"></script>
+<script src="js/lib/vue.min.js"></script>
+<script src="js/lib/vue-resource.min.js"></script>
+<script src="js/lib/qq_map.js?t=20190221"></script>
+<style>
+/* qq map css*/
+#qq_map{position:absolute;top:0;bottom:0;left:0;right:0;background:#fff;z-index:999;}
+#qq_map h1,h2,h3,h4,h5,h6{font-weight:normal;font-size:13px;margin:0;padding:0;}
+#qq_map h1,h2{overflow:hidden;height:20px;line-height:20px;}
+#qq_map h1{}
+#qq_map h2{color:#B0B0B0;}
+#qq_map .qq_map_top{text-align:center;padding:5px;background:url(img/top_bg.png);}
+#qq_map .qq_map_top_text{height:26px;line-height:26px;border:1px solid #ccc;background:#fff;border-radius:5px;color:#a7a7a7}
+#r_result{margin:0 10px}
+
+/* qq map search css*/
+#qq_map_search{position:absolute;top:0;bottom:0;left:0;right:0;z-index:9999;}
+#qq_map_search h1,h2,h3,h4,h5,h6{font-weight:normal;font-size:13px;margin:0;padding:0;}
+#qq_map_search h1,h2{overflow:hidden;height:20px;line-height:20px;}
+#qq_map_search h1{}
+#qq_map_search h2{color:#B0B0B0;}
+#qq_map_search .qq_map_search_top{text-align:left;padding:5px;background:url(img/top_bg.png);}
+#qq_map_search .qq_map_search_top input{width:75%;height:26px;line-height:26px;border:1px solid #ccc;border-radius:5px;padding-left:26px;background:#fff url(img/search.png) no-repeat;background-size:26px;background-position:left;}
+#qq_map_search .qq_map_search_mask{position:absolute;top:42px;bottom:0;left:0;right:0;background:#000;opacity:0.3;filter:alpha(opacity=30);}
+#qq_map_search_result{position:absolute;top:42px;bottom:0;left:0;right:0;background:#fff;padding:0 10px;}
+</style>
+</head>
+<body>
+<div id="app">
+	<a @click="open_qq_map">位置</a>
+	
+	<div id="qq_map" style="display:none">
+		<div class="qq_map_top" @click="open_qq_map_search">
+			<div class="qq_map_top_text"><img style="vertical-align:middle;height:20px" src="img/search.png">搜索地点</div>
+		</div>
+		<div id="l_map"></div>
+		<div id="r_result"></div>
+	</div>
+	<div id="qq_map_search" style="display:none">
+		<div class="qq_map_search_top"><input type="text" placeholder="搜索地点" v-model="qq_map_search_keyword"> <a @click="close_qq_map_search">取消</a></div>
+		<div class="qq_map_search_mask" @click="close_qq_map_search"></div>
+		<div id="qq_map_search_result" style="display:none"></div>
+	</div>
+</div>
+
+<script>
+var vm = new Vue({
+	el: '#app',
+	data: {
+		qq_map_search_keyword: ''
+	},
+	mounted: function () {
+		var _this = this;
+	},
+	methods: {
+		open_qq_map:function(){
+			var _this = this;
+			var center = new qq.maps.LatLng(39.916527, 116.397128);
+			_this.qq_map(center);
+		},
+		open_qq_map_search:function(){
+			var _this = this;
+			_this.qq_map_search();
+		},
+		close_qq_map_search:function(){
+			var _this = this;
+			document.getElementById("qq_map_search").style.display = 'none';
+		}
+	},
+	watch: {
+		
+	}
+});
+vm.$watch('qq_map_search_keyword', function(val,oval){
+	qq_map_search_keyword_suggest(val);
+});
+</script>
+</body>
+</html>
